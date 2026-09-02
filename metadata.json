@@ -1,0 +1,6 @@
+{
+  "name": "IOE Master - Luyện thi Tiếng Anh IOE",
+  "description": "Nền tảng luyện thi IOE tiếng Anh thông minh, siêu tốc và chuẩn cấu trúc dành cho giáo viên và học sinh các khối lớp.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
