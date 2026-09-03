@@ -33,7 +33,7 @@ export const LeaderboardView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-200">
+    <div className="w-full space-y-6 sm:space-y-8 animate-in fade-in duration-200">
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white rounded-3xl p-6 md:p-8 shadow-xl text-center space-y-2">
         <div className="inline-flex items-center space-x-2 bg-white/20 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">

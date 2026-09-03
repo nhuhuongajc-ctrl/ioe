@@ -8,8 +8,8 @@ import { ExamArenaView } from './components/views/ExamArenaView';
 import { ExamReviewView } from './components/views/ExamReviewView';
 import { LeaderboardView } from './components/views/LeaderboardView';
 import { HistoryView } from './components/views/HistoryView';
-import { PublicLibraryView } from './components/views/PublicLibraryView';
 import { AdminTeacherDashboardView } from './components/views/AdminTeacherDashboardView';
+import { TopExamStudentsWidget } from './components/widgets/TopExamStudentsWidget';
 import { 
   GraduationCap, 
   Trophy, 
@@ -17,21 +17,25 @@ import {
   History as HistoryIcon, 
   Layers, 
   User, 
-  Sparkles,
-  Flame,
-  CheckCircle2,
-  FolderDown,
-  ShieldAlert,
-  ShieldCheck,
-  Shield
+  Sparkles, 
+  Flame, 
+  CheckCircle2, 
+  ShieldAlert, 
+  ShieldCheck, 
+  Shield,
+  Eye,
+  ArrowLeft
 } from 'lucide-react';
 import { soundEngine } from './utils/soundEffects';
 
-type AppTab = 'practice' | 'mock_exam' | 'library' | 'leaderboard' | 'history' | 'admin_dashboard';
+type AppTab = 'practice' | 'mock_exam' | 'leaderboard' | 'history' | 'admin_dashboard';
 
 export default function App() {
   // Current active main tab
   const [activeTab, setActiveTab] = useState<AppTab>('practice');
+
+  // Preview student mode for teachers/admins
+  const [previewStudentMode, setPreviewStudentMode] = useState(false);
 
   // User Profile / Role Simulation
   const [currentUser, setCurrentUser] = useState<UserProfile>({
@@ -66,7 +70,7 @@ export default function App() {
     }
   }, [currentUser]);
 
-  // Handle role switch
+  // Handle role switch - Auto classifies view based on role
   const handleRoleChange = (role: UserRole) => {
     soundEngine.playClick();
     if (role === 'teacher') {
@@ -78,6 +82,9 @@ export default function App() {
         schoolName: 'TH Vinschool Times City',
         createdAt: new Date().toISOString()
       });
+      // Teacher lands directly in admin dashboard
+      setPreviewStudentMode(false);
+      setActiveTab('admin_dashboard');
     } else if (role === 'admin' || role === 'super_admin') {
       setCurrentUser({
         id: 'admin-1',
@@ -87,6 +94,9 @@ export default function App() {
         schoolName: 'Hội đồng Khảo thí IOE',
         createdAt: new Date().toISOString()
       });
+      // Admin lands directly in admin dashboard
+      setPreviewStudentMode(false);
+      setActiveTab('admin_dashboard');
     } else {
       setCurrentUser({
         id: 'student-demo-1',
@@ -96,10 +106,9 @@ export default function App() {
         schoolName: 'TH Nguyễn Du',
         createdAt: new Date().toISOString()
       });
-      // If student was on admin dashboard, redirect to public library
-      if (activeTab === 'admin_dashboard') {
-        setActiveTab('library');
-      }
+      // Student lands on public external interface
+      setPreviewStudentMode(false);
+      setActiveTab('practice');
     }
   };
 
@@ -168,11 +177,44 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col font-sans text-slate-900">
+      {/* Preview Mode Banner for Staff */}
+      {isStaff && previewStudentMode && (
+        <div className="bg-indigo-900 text-white px-4 py-2 text-xs font-bold flex items-center justify-between shadow-md z-50">
+          <div className="flex items-center gap-2">
+            <Eye className="w-4 h-4 text-amber-400" />
+            <span>
+              Chế độ xem trước giao diện Học sinh (Đang đăng nhập với vai trò: {currentUser.role === 'teacher' ? 'Giáo viên' : 'Quản trị viên'})
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              soundEngine.playClick();
+              setPreviewStudentMode(false);
+              setActiveTab('admin_dashboard');
+            }}
+            className="bg-indigo-700 hover:bg-indigo-600 text-white px-3 py-1 rounded-lg font-black transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Quay lại Bảng Quản Trị</span>
+          </button>
+        </div>
+      )}
+
       {/* Top Navbar */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           {/* Brand Logo */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('practice')}>
+          <div 
+            className="flex items-center space-x-3 cursor-pointer" 
+            onClick={() => {
+              if (isStaff && !previewStudentMode) {
+                setActiveTab('admin_dashboard');
+              } else {
+                setActiveTab('practice');
+              }
+            }}
+          >
             <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md">
               <GraduationCap className="w-6 h-6" />
             </div>
@@ -185,109 +227,104 @@ export default function App() {
             </div>
           </div>
 
-          {/* Navigation Tabs (Desktop) */}
-          <nav className="hidden md:flex items-center space-x-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/80">
-            <button
-              type="button"
-              onClick={() => { soundEngine.playClick(); setActiveTab('practice'); }}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
-                ${activeTab === 'practice' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
-              `}
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Luyện tập</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { soundEngine.playClick(); setActiveTab('mock_exam'); }}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
-                ${activeTab === 'mock_exam' ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
-              `}
-            >
-              <Trophy className="w-3.5 h-3.5" />
-              <span>Thi thử</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { soundEngine.playClick(); setActiveTab('library'); }}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
-                ${activeTab === 'library' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
-              `}
-            >
-              <FolderDown className="w-3.5 h-3.5" />
-              <span>Thư viện & Bí kíp</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { soundEngine.playClick(); setActiveTab('leaderboard'); }}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
-                ${activeTab === 'leaderboard' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
-              `}
-            >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Xếp hạng</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { soundEngine.playClick(); setActiveTab('history'); }}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
-                ${activeTab === 'history' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
-              `}
-            >
-              <HistoryIcon className="w-3.5 h-3.5" />
-              <span>Lịch sử</span>
-            </button>
-
-            {/* Admin / Teacher ONLY tab: NOT visible to students or guests */}
-            {isStaff ? (
+          {/* Navigation Tabs (Desktop) - No Admin button; auto-switches based on role */}
+          {(!isStaff || previewStudentMode) ? (
+            <nav className="hidden md:flex items-center space-x-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/80">
               <button
                 type="button"
-                onClick={() => { soundEngine.playClick(); setActiveTab('admin_dashboard'); }}
+                onClick={() => { soundEngine.playClick(); setActiveTab('practice'); }}
                 className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
-                  ${activeTab === 'admin_dashboard' ? 'bg-indigo-600 text-white shadow-xs' : 'text-indigo-700 hover:bg-indigo-50 font-extrabold'}
+                  ${activeTab === 'practice' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
                 `}
               >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Bảng Quản Trị</span>
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Luyện tập</span>
               </button>
-            ) : null}
-          </nav>
+
+              <button
+                type="button"
+                onClick={() => { soundEngine.playClick(); setActiveTab('mock_exam'); }}
+                className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
+                  ${activeTab === 'mock_exam' ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
+                `}
+              >
+                <Trophy className="w-3.5 h-3.5" />
+                <span>Thi thử</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { soundEngine.playClick(); setActiveTab('leaderboard'); }}
+                className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
+                  ${activeTab === 'leaderboard' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
+                `}
+              >
+                <Flame className="w-3.5 h-3.5" />
+                <span>Xếp hạng</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => { soundEngine.playClick(); setActiveTab('history'); }}
+                className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer
+                  ${activeTab === 'history' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}
+                `}
+              >
+                <HistoryIcon className="w-3.5 h-3.5" />
+                <span>Lịch sử</span>
+              </button>
+            </nav>
+          ) : (
+            <div className="hidden md:flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-600 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200">
+                Bảng Quản Trị & Khảo Thí
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  soundEngine.playClick();
+                  setPreviewStudentMode(true);
+                  setActiveTab('practice');
+                }}
+                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all cursor-pointer"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>Xem giao diện Học sinh</span>
+              </button>
+            </div>
+          )}
 
           {/* User Profile & Role Switcher */}
           <div className="flex items-center space-x-2">
-            {/* Quick Role Toggle for Demo/Testing */}
+            {/* Quick Role Toggle */}
             <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
               <button
                 type="button"
                 onClick={() => handleRoleChange('student')}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer
                   ${currentUser.role === 'student' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-500 hover:text-slate-800'}
                 `}
-                title="Đổi sang vai trò Học sinh (chỉ xem công khai)"
+                title="Đổi sang vai trò Học sinh (giao diện bên ngoài)"
               >
                 Học sinh
               </button>
               <button
                 type="button"
                 onClick={() => handleRoleChange('teacher')}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer
                   ${currentUser.role === 'teacher' ? 'bg-indigo-600 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'}
                 `}
-                title="Đổi sang vai trò Giáo viên (đăng bài & tải tài liệu cá nhân)"
+                title="Đổi sang vai trò Giáo viên (vào thẳng bảng quản trị)"
               >
                 Giáo viên
               </button>
               <button
                 type="button"
                 onClick={() => handleRoleChange('admin')}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all
+                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer
                   ${currentUser.role === 'super_admin' || currentUser.role === 'admin' ? 'bg-slate-900 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'}
                 `}
-                title="Đổi sang vai trò Super Admin (toàn quyền quản trị hệ thống)"
+                title="Đổi sang vai trò Super Admin (vào thẳng bảng quản trị)"
               >
                 Admin
               </button>
@@ -295,7 +332,7 @@ export default function App() {
 
             {/* User Avatar */}
             <div className="flex items-center space-x-2 pl-1 border-l border-slate-200">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+              <div className="w-8 h-8 rounded-full bg-linear-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
                 {currentUser.displayName.charAt(0)}
               </div>
               <div className="hidden lg:block text-left leading-tight">
@@ -308,80 +345,91 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Navigation Tabs */}
-        <div className="md:hidden flex items-center justify-around border-t border-slate-200 px-2 py-1.5 bg-slate-50 text-xs font-bold">
-          <button
-            type="button"
-            onClick={() => setActiveTab('practice')}
-            className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'practice' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600'}`}
-          >
-            Luyện tập
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('mock_exam')}
-            className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'mock_exam' ? 'bg-white text-amber-700 shadow-2xs' : 'text-slate-600'}`}
-          >
-            Thi thử
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('library')}
-            className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'library' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600'}`}
-          >
-            Thư viện
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('leaderboard')}
-            className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'leaderboard' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600'}`}
-          >
-            Xếp hạng
-          </button>
-          {isStaff && (
+        {/* Mobile Navigation Tabs - visible only when student or previewing student */}
+        {(!isStaff || previewStudentMode) && (
+          <div className="md:hidden flex items-center justify-around border-t border-slate-200 px-2 py-1.5 bg-slate-50 text-xs font-bold">
             <button
               type="button"
-              onClick={() => setActiveTab('admin_dashboard')}
-              className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'admin_dashboard' ? 'bg-indigo-600 text-white shadow-2xs' : 'text-indigo-700'}`}
+              onClick={() => setActiveTab('practice')}
+              className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'practice' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600'}`}
             >
-              Bảng Quản trị
+              Luyện tập
             </button>
-          )}
-        </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab('mock_exam')}
+              className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'mock_exam' ? 'bg-white text-amber-700 shadow-2xs' : 'text-slate-600'}`}
+            >
+              Thi thử
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('leaderboard')}
+              className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'leaderboard' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600'}`}
+            >
+              Xếp hạng
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('history')}
+              className={`px-2.5 py-1.5 rounded-lg ${activeTab === 'history' ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600'}`}
+            >
+              Lịch sử
+            </button>
+          </div>
+        )}
       </header>
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {activeTab === 'practice' && (
-          <PracticeHubView
-            currentGrade={currentUser.grade}
-            onStartPractice={handleStartPractice}
-          />
-        )}
+        {['practice', 'mock_exam', 'leaderboard', 'history'].includes(activeTab) && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 lg:py-8">
+            <div className="flex flex-col lg:flex-row gap-6 items-start">
+              {/* Left Main View */}
+              <div className="flex-1 min-w-0 w-full">
+                {activeTab === 'practice' && (
+                  <PracticeHubView
+                    currentGrade={currentUser.grade}
+                    onStartPractice={handleStartPractice}
+                  />
+                )}
 
-        {activeTab === 'mock_exam' && (
-          <MockExamHubView
-            currentGrade={currentUser.grade}
-            onStartExam={handleStartMockExam}
-          />
-        )}
+                {activeTab === 'mock_exam' && (
+                  <MockExamHubView
+                    currentGrade={currentUser.grade}
+                    onStartExam={handleStartMockExam}
+                  />
+                )}
 
-        {activeTab === 'library' && (
-          <PublicLibraryView
-            currentGrade={currentUser.grade}
-            onNavigateToPractice={() => setActiveTab('practice')}
-            onNavigateToMockExam={() => setActiveTab('mock_exam')}
-          />
-        )}
+                {activeTab === 'leaderboard' && <LeaderboardView />}
 
-        {activeTab === 'leaderboard' && <LeaderboardView />}
+                {activeTab === 'history' && (
+                  <HistoryView onReviewPastAttempt={handleReviewPastAttempt} />
+                )}
+              </div>
 
-        {activeTab === 'history' && (
-          <HistoryView onReviewPastAttempt={handleReviewPastAttempt} />
+              {/* Right Column: Top 10 học sinh thi thử block (always present on practice, mock_exam, leaderboard, history) */}
+              <aside className="w-full lg:w-80 xl:w-96 shrink-0 lg:sticky lg:top-24">
+                <TopExamStudentsWidget
+                  currentGrade={currentUser.grade}
+                  onNavigateToLeaderboard={() => {
+                    soundEngine.playClick();
+                    setActiveTab('leaderboard');
+                  }}
+                />
+              </aside>
+            </div>
+          </div>
         )}
 
         {activeTab === 'admin_dashboard' && isStaff && (
-          <AdminTeacherDashboardView currentUser={currentUser} />
+          <AdminTeacherDashboardView 
+            currentUser={currentUser} 
+            onNavigateToStudentView={() => {
+              setPreviewStudentMode(true);
+              setActiveTab('practice');
+            }}
+          />
         )}
       </main>
 

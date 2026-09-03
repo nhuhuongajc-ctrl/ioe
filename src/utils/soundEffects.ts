@@ -51,6 +51,10 @@ class SoundEffectEngine {
     osc.stop(now + 0.35);
   }
 
+  playSuccess() {
+    this.playCorrect();
+  }
+
   playIncorrect() {
     if (this.isMuted) return;
     const ctx = this.getContext();
@@ -72,6 +76,10 @@ class SoundEffectEngine {
 
     osc.start(now);
     osc.stop(now + 0.3);
+  }
+
+  playError() {
+    this.playIncorrect();
   }
 
   playClick() {

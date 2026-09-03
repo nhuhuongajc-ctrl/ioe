@@ -266,13 +266,16 @@ export class MemoryOrSqliteAdapter implements IRepository {
       .sort((a, b) => (b.submittedAt || b.serverPreparedAt) - (a.submittedAt || a.serverPreparedAt));
   }
 
-  async getLeaderboard(params: { grade?: number; round?: number; limit?: number }): Promise<LeaderboardEntry[]> {
+  async getLeaderboard(params: { grade?: number; round?: number; limit?: number; competitionLevel?: string }): Promise<LeaderboardEntry[]> {
     let list = [...this.leaderboard];
     if (params.grade) {
       list = list.filter(e => e.grade === params.grade);
     }
     if (params.round) {
       list = list.filter(e => e.round === params.round);
+    }
+    if (params.competitionLevel) {
+      list = list.filter(e => e.competitionLevel === params.competitionLevel);
     }
     list.sort((a, b) => b.score - a.score || a.timeSpentSeconds - b.timeSpentSeconds);
     return list.slice(0, params.limit || 50);

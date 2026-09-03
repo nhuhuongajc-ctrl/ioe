@@ -38,7 +38,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({ onReviewPastAttempt })
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6 animate-in fade-in duration-200">
+    <div className="w-full space-y-6 animate-in fade-in duration-200">
       <div>
         <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
           Lịch Sử Làm Bài & Tiến Trình Học Tập

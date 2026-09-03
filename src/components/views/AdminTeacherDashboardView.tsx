@@ -3,6 +3,10 @@ import { Post, DocumentItem, PostCategory, DocumentCategory, ContentStatus } fro
 import { UserProfile } from '../../shared/types/user';
 import { api } from '../../services/api';
 import { QuestionFactoryView } from './QuestionFactoryView';
+import { OverviewTab } from '../admin/OverviewTab';
+import { StudentsTab } from '../admin/StudentsTab';
+import { BlueprintsTab } from '../admin/BlueprintsTab';
+import { QuestionBankTab } from '../admin/QuestionBankTab';
 import { 
   FileText, 
   UploadCloud, 
@@ -35,21 +39,28 @@ import {
   User,
   Calendar,
   Lock,
-  ExternalLink
+  ExternalLink,
+  BarChart3,
+  Users,
+  HelpCircle,
+  GraduationCap
 } from 'lucide-react';
 import { soundEngine } from '../../utils/soundEffects';
 
 interface AdminTeacherDashboardViewProps {
   currentUser: UserProfile;
+  onNavigateToStudentView?: () => void;
 }
 
-export function AdminTeacherDashboardView({ currentUser }: AdminTeacherDashboardViewProps) {
+export function AdminTeacherDashboardView({ currentUser, onNavigateToStudentView }: AdminTeacherDashboardViewProps) {
   const isSuperAdmin = currentUser.role === 'super_admin' || currentUser.role === 'admin';
   const isTeacher = currentUser.role === 'teacher';
   const hasAccess = isSuperAdmin || isTeacher;
 
-  // Active Main SubTab
-  const [activeSubTab, setActiveSubTab] = useState<'posts' | 'documents' | 'factory' | 'audit'>('posts');
+  // Active Main SubTab: overview, questions, blueprints, students, posts, documents, factory, audit
+  const [activeSubTab, setActiveSubTab] = useState<
+    'overview' | 'questions' | 'blueprints' | 'students' | 'posts' | 'documents' | 'factory' | 'audit'
+  >('overview');
 
   // ================= POSTS STATE =================
   const [posts, setPosts] = useState<Post[]>([]);
@@ -507,25 +518,38 @@ export function AdminTeacherDashboardView({ currentUser }: AdminTeacherDashboard
             {isSuperAdmin ? 'Cổng Quản Trị Hệ Thống Toàn Quyền (Super Admin)' : 'Bảng Điều Khiển Giáo Viên (Teacher Hub)'}
           </div>
           <h1 className="text-3xl font-black tracking-tight">
-            Quản Trị Nội Dung & Tài Liệu IOE
+            Quản Trị Khảo Thí & Nội Dung IOE Master
           </h1>
           <p className="text-slate-400 text-sm leading-relaxed">
             {isSuperAdmin 
-              ? 'Toàn quyền kiểm duyệt, xuất bản, lưu trữ và điều phối bài viết, tài liệu cũng như theo dõi nhật ký bảo mật toàn hệ thống.'
-              : 'Đăng bài viết ôn tập, tải lên tài liệu đề thi và quản lý trạng thái xuất bản các nội dung giảng dạy của bạn.'}
+              ? 'Toàn quyền quản lý học sinh, ma trận bộ đề các cấp, ngân hàng câu hỏi, bài viết, tài liệu và giám sát hệ thống.'
+              : 'Quản lý học sinh, theo dõi số câu hỏi các cấp, đăng đề thi và biên soạn nội dung khảo thí chuẩn IOE.'}
           </p>
         </div>
 
         {/* Quick User Identity Pill */}
         <div className="z-10 bg-slate-800/80 backdrop-blur-md p-4 rounded-2xl border border-slate-700 space-y-2 min-w-[220px]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
-              {currentUser.displayName.charAt(0)}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+                {currentUser.displayName.charAt(0)}
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white leading-none">{currentUser.displayName}</p>
+                <p className="text-xs text-indigo-400 font-semibold mt-1 uppercase">{currentUser.role}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-bold text-white leading-none">{currentUser.displayName}</p>
-              <p className="text-xs text-blue-400 font-semibold mt-1 uppercase">{currentUser.role}</p>
-            </div>
+            {onNavigateToStudentView && (
+              <button
+                type="button"
+                onClick={onNavigateToStudentView}
+                className="px-2.5 py-1.5 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 rounded-xl text-[11px] font-bold transition-all border border-indigo-400/30 flex items-center gap-1 cursor-pointer"
+                title="Mở giao diện phòng thi của học sinh"
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>Giao diện HS</span>
+              </button>
+            )}
           </div>
           <div className="text-[11px] text-slate-400 border-t border-slate-700/80 pt-2">
             Đơn vị: {currentUser.schoolName || 'Hệ thống IOE Master'}
@@ -552,54 +576,163 @@ export function AdminTeacherDashboardView({ currentUser }: AdminTeacherDashboard
 
       {/* Navigation SubTabs */}
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+        {/* 1. Tổng quan */}
         <button
-          onClick={() => { soundEngine.playClick(); setActiveSubTab('posts'); }}
-          className={`px-5 py-2.5 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 ${
-            activeSubTab === 'posts'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <FileText className="w-4 h-4" />
-          Quản lý Bài viết ({postTotal})
-        </button>
-
-        <button
-          onClick={() => { soundEngine.playClick(); setActiveSubTab('documents'); }}
-          className={`px-5 py-2.5 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 ${
-            activeSubTab === 'documents'
+          type="button"
+          onClick={() => { soundEngine.playClick(); setActiveSubTab('overview'); }}
+          className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            activeSubTab === 'overview'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <UploadCloud className="w-4 h-4" />
-          Kho Tài liệu & Tệp tin ({docTotal})
+          <BarChart3 className="w-4 h-4" />
+          <span>Tổng Quan</span>
         </button>
 
+        {/* 2. Quản lý học sinh */}
         <button
-          onClick={() => { soundEngine.playClick(); setActiveSubTab('factory'); }}
-          className={`px-5 py-2.5 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 ${
-            activeSubTab === 'factory'
+          type="button"
+          onClick={() => { soundEngine.playClick(); setActiveSubTab('students'); }}
+          className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            activeSubTab === 'students'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <Users className="w-4 h-4" />
+          <span>Quản Lý Học Sinh</span>
+        </button>
+
+        {/* 3. Bộ đề các cấp */}
+        <button
+          type="button"
+          onClick={() => { soundEngine.playClick(); setActiveSubTab('blueprints'); }}
+          className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            activeSubTab === 'blueprints'
               ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <Sparkles className="w-4 h-4" />
-          Xưởng Chế Tác Câu Hỏi AI
+          <Layers className="w-4 h-4" />
+          <span>Bộ Đề Các Cấp</span>
         </button>
 
+        {/* 4. Ngân hàng & Đăng câu hỏi */}
         <button
-          onClick={() => { soundEngine.playClick(); setActiveSubTab('audit'); }}
-          className={`px-5 py-2.5 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 ${
-            activeSubTab === 'audit'
-              ? 'bg-slate-800 text-white shadow-md shadow-black/10'
+          type="button"
+          onClick={() => { soundEngine.playClick(); setActiveSubTab('questions'); }}
+          className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            activeSubTab === 'questions'
+              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
-          <Activity className="w-4 h-4" />
-          Nhật ký Hoạt động (Audit Logs)
+          <HelpCircle className="w-4 h-4" />
+          <span>Ngân Hàng & Đăng Câu Hỏi</span>
         </button>
+
+        {/* 5. AI Soạn Đề */}
+        <button
+          type="button"
+          onClick={() => { soundEngine.playClick(); setActiveSubTab('factory'); }}
+          className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            activeSubTab === 'factory'
+              ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>AI Soạn Đề</span>
+        </button>
+
+        {/* 6. Bài viết */}
+        <button
+          type="button"
+          onClick={() => { soundEngine.playClick(); setActiveSubTab('posts'); }}
+          className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            activeSubTab === 'posts'
+              ? 'bg-blue-700 text-white shadow-md shadow-blue-700/20'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <FileText className="w-4 h-4" />
+          <span>Bài Viết & Cẩm Nang ({postTotal})</span>
+        </button>
+
+        {/* 7. Tài liệu */}
+        <button
+          type="button"
+          onClick={() => { soundEngine.playClick(); setActiveSubTab('documents'); }}
+          className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+            activeSubTab === 'documents'
+              ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <UploadCloud className="w-4 h-4" />
+          <span>Tài Liệu & Tệp ({docTotal})</span>
+        </button>
+
+        {/* 8. Audit */}
+        {isSuperAdmin && (
+          <button
+            type="button"
+            onClick={() => { soundEngine.playClick(); setActiveSubTab('audit'); }}
+            className={`px-4 py-2.5 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer ${
+              activeSubTab === 'audit'
+                ? 'bg-slate-800 text-white shadow-md shadow-black/10'
+                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            <span>Nhật Ký Hệ Thống</span>
+          </button>
+        )}
       </div>
+
+      {/* ================= OVERVIEW SUBTAB ================= */}
+      {activeSubTab === 'overview' && (
+        <OverviewTab
+          onNavigateToTab={(t) => {
+            soundEngine.playClick();
+            setActiveSubTab(t);
+          }}
+          onOpenCreateQuestion={() => {
+            soundEngine.playClick();
+            setActiveSubTab('questions');
+          }}
+          onOpenCreateBlueprint={() => {
+            soundEngine.playClick();
+            setActiveSubTab('blueprints');
+          }}
+        />
+      )}
+
+      {/* ================= STUDENTS SUBTAB ================= */}
+      {activeSubTab === 'students' && (
+        <StudentsTab />
+      )}
+
+      {/* ================= BLUEPRINTS SUBTAB ================= */}
+      {activeSubTab === 'blueprints' && (
+        <BlueprintsTab
+          onNavigateToQuestions={() => {
+            soundEngine.playClick();
+            setActiveSubTab('questions');
+          }}
+        />
+      )}
+
+      {/* ================= QUESTION BANK SUBTAB ================= */}
+      {activeSubTab === 'questions' && (
+        <QuestionBankTab
+          onOpenAIFactory={() => {
+            soundEngine.playClick();
+            setActiveSubTab('factory');
+          }}
+        />
+      )}
 
       {/* ================= POST MANAGEMENT SUBTAB ================= */}
       {activeSubTab === 'posts' && (

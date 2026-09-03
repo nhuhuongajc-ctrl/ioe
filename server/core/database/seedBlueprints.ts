@@ -1,11 +1,11 @@
 import { ExamBlueprint } from '../../../src/shared/types/ioe.js';
 
 export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
-  // ================= GRADE 1 (100 CÂU / 30 PHÚT) =================
+  // ================= GRADE 1 (100 CÂU / 30 PHÚT - 3 CẤP THI) =================
   {
     id: 'bp-g1-school',
     title: 'IOE Lớp 1 - Cấp Trường (100 câu / 30 phút)',
-    description: 'Đề thi thử IOE Lớp 1 Cấp Trường. Tập trung vào bảng chữ cái, màu sắc, số đếm từ 1-10, các con vật nuôi và đồ dùng học tập quen thuộc.',
+    description: 'Đề thi thử IOE Lớp 1 Cấp Trường chuẩn 100 câu trong 30 phút. Tập trung vào bảng chữ cái, màu sắc, số đếm từ 1-10, các con vật nuôi và đồ dùng học tập quen thuộc.',
     grade: 1,
     competitionLevel: 'school',
     isOfficialMock: true,
@@ -18,7 +18,7 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   {
     id: 'bp-g1-district',
     title: 'IOE Lớp 1 - Cấp Quận/Huyện (100 câu / 30 phút)',
-    description: 'Đề thi IOE Lớp 1 Cấp Huyện. Mở rộng từ vựng gia đình, đồ chơi, cơ thể và câu chào hỏi đơn giản.',
+    description: 'Đề thi IOE Lớp 1 Cấp Huyện chuẩn 100 câu. Mở rộng từ vựng gia đình, đồ chơi, bộ phận cơ thể và các mẫu câu chào hỏi giao tiếp đơn giản.',
     grade: 1,
     competitionLevel: 'district',
     isOfficialMock: true,
@@ -30,8 +30,8 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   },
   {
     id: 'bp-g1-province',
-    title: 'IOE Lớp 1 - Cấp Tỉnh/TP & Quốc Gia (100 câu / 30 phút)',
-    description: 'Đề thi thử Lớp 1 Cấp Tỉnh/Toàn quốc với dạng bài điền chữ cái còn thiếu, sắp xếp từ và nghe phản xạ.',
+    title: 'IOE Lớp 1 - Cấp Tỉnh/Thành Phố (100 câu / 30 phút)',
+    description: 'Đề thi IOE Lớp 1 Cấp Tỉnh/Thành Phố (vòng cấp cao nhất của Khối 1) với dạng bài điền chữ cái còn thiếu, sắp xếp từ thành câu ngắn và nghe tranh phản xạ.',
     grade: 1,
     competitionLevel: 'province',
     isOfficialMock: true,
@@ -41,25 +41,12 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     difficultyDistribution: { 1: 25, 2: 45, 3: 30 },
     createdAt: '2026-08-15T08:00:00.000Z'
   },
-  {
-    id: 'bp-g1-mini',
-    title: 'IOE Lớp 1 - Mini Test Khởi Động (20 câu)',
-    description: 'Bài luyện nhanh 20 câu kiểm tra phản xạ từ vựng và hình ảnh.',
-    grade: 1,
-    competitionLevel: 'practice',
-    isOfficialMock: false,
-    durationMinutes: 10,
-    totalQuestions: 20,
-    skillDistribution: { vocabulary: 12, grammar: 4, reading: 2, listening: 2 },
-    difficultyDistribution: { 1: 15, 2: 5 },
-    createdAt: '2026-08-15T08:00:00.000Z'
-  },
 
-  // ================= GRADE 2 (100 CÂU / 30 PHÚT) =================
+  // ================= GRADE 2 (100 CÂU / 30 PHÚT - 3 CẤP THI) =================
   {
     id: 'bp-g2-school',
     title: 'IOE Lớp 2 - Cấp Trường (100 câu / 30 phút)',
-    description: 'Đề thi IOE Lớp 2 Cấp Trường. Kiểm tra số đếm 1-20, món ăn, thức uống, hình dạng và hoạt động hằng ngày.',
+    description: 'Đề thi IOE Lớp 2 Cấp Trường chuẩn 100 câu trong 30 phút. Kiểm tra số đếm 1-20, món ăn, thức uống, hình khối và hoạt động hằng ngày.',
     grade: 2,
     competitionLevel: 'school',
     isOfficialMock: true,
@@ -72,7 +59,7 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   {
     id: 'bp-g2-district',
     title: 'IOE Lớp 2 - Cấp Quận/Huyện (100 câu / 30 phút)',
-    description: 'Đề thi IOE Lớp 2 Cấp Huyện. Luyện tập câu hỏi This is / That is, What is this?, Can you...?',
+    description: 'Đề thi IOE Lớp 2 Cấp Huyện chuẩn 100 câu. Luyện tập các mẫu câu This is / That is, What is this?, Can you...?, giới từ cơ bản.',
     grade: 2,
     competitionLevel: 'district',
     isOfficialMock: true,
@@ -84,8 +71,8 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   },
   {
     id: 'bp-g2-province',
-    title: 'IOE Lớp 2 - Cấp Tỉnh & Toàn Quốc (100 câu / 30 phút)',
-    description: 'Đề thi IOE Lớp 2 Cấp Tỉnh/Quốc Gia nâng cao với các dạng ghép nối, sắp xếp câu và điền chữ cái khuyết.',
+    title: 'IOE Lớp 2 - Cấp Tỉnh/Thành Phố (100 câu / 30 phút)',
+    description: 'Đề thi IOE Lớp 2 Cấp Tỉnh/Thành Phố (vòng cấp cao nhất của Khối 2) với các dạng ghép nối, sắp xếp câu và điền chữ cái khuyết theo tranh minh họa.',
     grade: 2,
     competitionLevel: 'province',
     isOfficialMock: true,
@@ -96,7 +83,7 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     createdAt: '2026-08-15T08:00:00.000Z'
   },
 
-  // ================= GRADE 3 (200 CÂU / 30 PHÚT) =================
+  // ================= GRADE 3 (200 CÂU / 30 PHÚT - 4 CẤP THI) =================
   {
     id: 'bp-g3-school',
     title: 'IOE Lớp 3 - Cấp Trường (200 câu / 30 phút)',
@@ -125,8 +112,8 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   },
   {
     id: 'bp-g3-province',
-    title: 'IOE Lớp 3 - Cấp Tỉnh/TP & Quốc Gia (200 câu / 30 phút)',
-    description: 'Đề thi IOE Lớp 3 Cấp Tỉnh/Quốc Gia nâng cao. Phân loại học sinh giỏi với các bẫy ngữ pháp và từ vựng mở rộng.',
+    title: 'IOE Lớp 3 - Cấp Tỉnh/Thành Phố (200 câu / 30 phút)',
+    description: 'Đề thi IOE Lớp 3 Cấp Tỉnh/Thành Phố 200 câu. Phân loại học sinh giỏi với các bẫy ngữ pháp và từ vựng mở rộng.',
     grade: 3,
     competitionLevel: 'province',
     isOfficialMock: true,
@@ -136,8 +123,21 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     difficultyDistribution: { 1: 30, 2: 80, 3: 70, 4: 20 },
     createdAt: '2026-08-15T08:00:00.000Z'
   },
+  {
+    id: 'bp-g3-national',
+    title: 'IOE Lớp 3 - Cấp Toàn Quốc (200 câu / 30 phút)',
+    description: 'Đề thi IOE Lớp 3 Vòng Toàn Quốc (Chung kết Quốc Gia) chuẩn 200 câu / 30 phút với độ khó cao và phản xạ tốc độ cao.',
+    grade: 3,
+    competitionLevel: 'national',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 70, grammar: 75, reading: 25, listening: 30 },
+    difficultyDistribution: { 1: 20, 2: 60, 3: 80, 4: 40 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
 
-  // ================= GRADE 4 (200 CÂU / 30 PHÚT) =================
+  // ================= GRADE 4 (200 CÂU / 30 PHÚT - 4 CẤP THI) =================
   {
     id: 'bp-g4-school',
     title: 'IOE Lớp 4 - Cấp Trường (200 câu / 30 phút)',
@@ -166,8 +166,8 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   },
   {
     id: 'bp-g4-province',
-    title: 'IOE Lớp 4 - Cấp Tỉnh & Quốc Gia (200 câu / 30 phút)',
-    description: 'Đề thi IOE Lớp 4 Cấp Tỉnh/Quốc Gia nâng cao bám sát cấu trúc đề thi chính thức Bộ GD&ĐT.',
+    title: 'IOE Lớp 4 - Cấp Tỉnh/Thành Phố (200 câu / 30 phút)',
+    description: 'Đề thi IOE Lớp 4 Cấp Tỉnh/Thành Phố 200 câu bám sát cấu trúc đề thi chính thức Bộ GD&ĐT.',
     grade: 4,
     competitionLevel: 'province',
     isOfficialMock: true,
@@ -177,8 +177,21 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     difficultyDistribution: { 1: 25, 2: 75, 3: 75, 4: 25 },
     createdAt: '2026-08-15T08:00:00.000Z'
   },
+  {
+    id: 'bp-g4-national',
+    title: 'IOE Lớp 4 - Cấp Toàn Quốc (200 câu / 30 phút)',
+    description: 'Đề thi IOE Lớp 4 Vòng Toàn Quốc 200 câu trong 30 phút. Phân loại thí sinh xuất sắc toàn quốc.',
+    grade: 4,
+    competitionLevel: 'national',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 70, grammar: 75, reading: 30, listening: 25 },
+    difficultyDistribution: { 1: 15, 2: 60, 3: 85, 4: 40 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
 
-  // ================= GRADE 5 (200 CÂU / 30 PHÚT) =================
+  // ================= GRADE 5 (200 CÂU / 30 PHÚT - 4 CẤP THI) =================
   {
     id: 'bp-g5-school',
     title: 'IOE Lớp 5 - Cấp Trường (200 câu / 30 phút)',
@@ -232,7 +245,7 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     createdAt: '2026-08-15T08:00:00.000Z'
   },
 
-  // ================= GRADE 6 (200 CÂU / 30 PHÚT) =================
+  // ================= GRADE 6 (200 CÂU / 30 PHÚT - 4 CẤP THI) =================
   {
     id: 'bp-g6-school',
     title: 'IOE Lớp 6 - Cấp Trường (200 câu / 30 phút)',
@@ -248,8 +261,8 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   },
   {
     id: 'bp-g6-district',
-    title: 'IOE Lớp 6 - Cấp Huyện/Tỉnh (200 câu / 30 phút)',
-    description: 'Đề thi IOE Khối 6 Cấp Huyện/Tỉnh. Tăng cường câu so sánh hơn, so sánh nhất, modal verbs và bài đọc văn hóa.',
+    title: 'IOE Lớp 6 - Cấp Quận/Huyện (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 6 Cấp Quận/Huyện. Tăng cường câu so sánh hơn, so sánh nhất, modal verbs và bài đọc văn hóa.',
     grade: 6,
     competitionLevel: 'district',
     isOfficialMock: true,
@@ -259,8 +272,34 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     difficultyDistribution: { 1: 25, 2: 70, 3: 75, 4: 30 },
     createdAt: '2026-08-15T08:00:00.000Z'
   },
+  {
+    id: 'bp-g6-province',
+    title: 'IOE Lớp 6 - Cấp Tỉnh/Thành Phố (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 6 Cấp Tỉnh/Thành Phố nâng cao. Mệnh đề quan hệ cơ bản, thì tương lai có dự định và ngữ âm trọng âm.',
+    grade: 6,
+    competitionLevel: 'province',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 65, grammar: 75, reading: 30, listening: 30 },
+    difficultyDistribution: { 1: 20, 2: 65, 3: 80, 4: 35 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
+  {
+    id: 'bp-g6-national',
+    title: 'IOE Lớp 6 - Cấp Toàn Quốc (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 6 Vòng Toàn Quốc (National Round) 200 câu trong 30 phút với độ khó cao phân loại học sinh giỏi cấp quốc gia.',
+    grade: 6,
+    competitionLevel: 'national',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 60, grammar: 75, reading: 35, listening: 30 },
+    difficultyDistribution: { 1: 15, 2: 50, 3: 85, 4: 40, 5: 10 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
 
-  // ================= GRADE 7 (200 CÂU / 30 PHÚT) =================
+  // ================= GRADE 7 (200 CÂU / 30 PHÚT - 4 CẤP THI) =================
   {
     id: 'bp-g7-school',
     title: 'IOE Lớp 7 - Cấp Trường (200 câu / 30 phút)',
@@ -275,9 +314,22 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     createdAt: '2026-08-15T08:00:00.000Z'
   },
   {
+    id: 'bp-g7-district',
+    title: 'IOE Lớp 7 - Cấp Quận/Huyện (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 7 Cấp Quận/Huyện. Thì quá khứ đơn, used to, câu bị động cơ bản, liên từ although/because.',
+    grade: 7,
+    competitionLevel: 'district',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 65, grammar: 75, reading: 30, listening: 30 },
+    difficultyDistribution: { 1: 25, 2: 70, 3: 75, 4: 30 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
+  {
     id: 'bp-g7-province',
-    title: 'IOE Lớp 7 - Cấp Tỉnh & Toàn Quốc (200 câu / 30 phút)',
-    description: 'Đề thi IOE Khối 7 Cấp Tỉnh/Quốc Gia. Thì quá khứ đơn, used to, câu bị động cơ bản, liên từ although/because.',
+    title: 'IOE Lớp 7 - Cấp Tỉnh/Thành Phố (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 7 Cấp Tỉnh/Thành Phố. Tăng cường thì hiện tại hoàn thành, câu hỏi đuôi và bài nghe dài.',
     grade: 7,
     competitionLevel: 'province',
     isOfficialMock: true,
@@ -287,8 +339,21 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     difficultyDistribution: { 1: 20, 2: 65, 3: 80, 4: 35 },
     createdAt: '2026-08-15T08:00:00.000Z'
   },
+  {
+    id: 'bp-g7-national',
+    title: 'IOE Lớp 7 - Cấp Toàn Quốc (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 7 Vòng Toàn Quốc (National Round) 200 câu / 30 phút. Thử thách kiến thức ngữ pháp sâu rộng và phản xạ nghe nói.',
+    grade: 7,
+    competitionLevel: 'national',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 60, grammar: 75, reading: 35, listening: 30 },
+    difficultyDistribution: { 1: 15, 2: 50, 3: 85, 4: 45, 5: 5 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
 
-  // ================= GRADE 8 (200 CÂU / 30 PHÚT) =================
+  // ================= GRADE 8 (200 CÂU / 30 PHÚT - 4 CẤP THI) =================
   {
     id: 'bp-g8-school',
     title: 'IOE Lớp 8 - Cấp Trường (200 câu / 30 phút)',
@@ -303,9 +368,22 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     createdAt: '2026-08-15T08:00:00.000Z'
   },
   {
+    id: 'bp-g8-district',
+    title: 'IOE Lớp 8 - Cấp Quận/Huyện (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 8 Cấp Quận/Huyện. Câu điều kiện loại 2, gián tiếp reported speech, mệnh đề trạng ngữ chỉ kết quả.',
+    grade: 8,
+    competitionLevel: 'district',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 65, grammar: 75, reading: 30, listening: 30 },
+    difficultyDistribution: { 1: 20, 2: 65, 3: 80, 4: 35 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
+  {
     id: 'bp-g8-province',
-    title: 'IOE Lớp 8 - Cấp Tỉnh & Toàn Quốc (200 câu / 30 phút)',
-    description: 'Đề thi IOE Khối 8 Cấp Tỉnh/Quốc Gia nâng cao với các cấu trúc ngữ pháp phức hợp và từ đồng nghĩa/trái nghĩa.',
+    title: 'IOE Lớp 8 - Cấp Tỉnh/Thành Phố (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 8 Cấp Tỉnh/Thành Phố nâng cao với các cấu trúc ngữ pháp phức hợp, collocations và từ đồng nghĩa/trái nghĩa.',
     grade: 8,
     competitionLevel: 'province',
     isOfficialMock: true,
@@ -315,8 +393,21 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     difficultyDistribution: { 1: 15, 2: 60, 3: 85, 4: 40 },
     createdAt: '2026-08-15T08:00:00.000Z'
   },
+  {
+    id: 'bp-g8-national',
+    title: 'IOE Lớp 8 - Cấp Toàn Quốc (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 8 Vòng Toàn Quốc (National Round) chuẩn 200 câu / 30 phút phân loại thí sinh xuất sắc các tỉnh thành.',
+    grade: 8,
+    competitionLevel: 'national',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 60, grammar: 75, reading: 35, listening: 30 },
+    difficultyDistribution: { 1: 10, 2: 50, 3: 85, 4: 45, 5: 10 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
 
-  // ================= GRADE 9 (200 CÂU / 30 PHÚT) =================
+  // ================= GRADE 9 (200 CÂU / 30 PHÚT - 4 CẤP THI) =================
   {
     id: 'bp-g9-school',
     title: 'IOE Lớp 9 - Cấp Trường (200 câu / 30 phút)',
@@ -333,7 +424,7 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
   {
     id: 'bp-g9-district',
     title: 'IOE Lớp 9 - Cấp Quận/Huyện (200 câu / 30 phút)',
-    description: 'Đề thi IOE Khối 9 Cấp Huyện. Câu ước Wish, câu gián tiếp, mệnh đề quan hệ (Relative Clauses), phrasal verbs.',
+    description: 'Đề thi IOE Khối 9 Cấp Quận/Huyện. Câu ước Wish, câu gián tiếp, mệnh đề quan hệ (Relative Clauses), phrasal verbs.',
     grade: 9,
     competitionLevel: 'district',
     isOfficialMock: true,
@@ -341,6 +432,19 @@ export const INITIAL_SEED_BLUEPRINTS: ExamBlueprint[] = [
     totalQuestions: 200,
     skillDistribution: { vocabulary: 60, grammar: 80, reading: 30, listening: 30 },
     difficultyDistribution: { 1: 15, 2: 55, 3: 85, 4: 45 },
+    createdAt: '2026-08-15T08:00:00.000Z'
+  },
+  {
+    id: 'bp-g9-province',
+    title: 'IOE Lớp 9 - Cấp Tỉnh/Thành Phố (200 câu / 30 phút)',
+    description: 'Đề thi IOE Khối 9 Cấp Tỉnh/Thành Phố. Tăng cường câu điều kiện hỗn hợp, đảo ngữ, cấu trúc so sánh kép và idioms.',
+    grade: 9,
+    competitionLevel: 'province',
+    isOfficialMock: true,
+    durationMinutes: 30,
+    totalQuestions: 200,
+    skillDistribution: { vocabulary: 60, grammar: 75, reading: 35, listening: 30 },
+    difficultyDistribution: { 1: 10, 2: 50, 3: 85, 4: 45, 5: 10 },
     createdAt: '2026-08-15T08:00:00.000Z'
   },
   {

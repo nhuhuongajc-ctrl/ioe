@@ -61,7 +61,7 @@ export interface IRepository {
   listUserAttempts(userId: string): Promise<AttemptSnapshot[]>;
 
   // Leaderboard
-  getLeaderboard(params: { grade?: number; round?: number; limit?: number }): Promise<LeaderboardEntry[]>;
+  getLeaderboard(params: { grade?: number; round?: number; limit?: number; competitionLevel?: string }): Promise<LeaderboardEntry[]>;
   recordLeaderboardEntry(entry: LeaderboardEntry): Promise<void>;
 
   // Posts / Articles
@@ -88,6 +88,18 @@ export interface IRepository {
   getUserByEmail(email: string): Promise<UserProfile | null>;
   saveUser(user: UserProfile): Promise<UserProfile>;
   updateUserRole(userId: string, role: UserRole): Promise<boolean>;
+  listUsers(filter?: { role?: UserRole; grade?: number; search?: string; limit?: number; offset?: number }): Promise<{ items: UserProfile[]; total: number }>;
+  getSystemOverviewStats(): Promise<{
+    totalQuestions: number;
+    questionsByGrade: Record<number, number>;
+    questionsByLevel: Record<string, number>;
+    questionsBySkill: Record<string, number>;
+    totalStudents: number;
+    attemptsToday: number;
+    totalAttempts: number;
+    totalBlueprints: number;
+    recentAttempts: any[];
+  }>;
 
   // Audit Logs
   recordAuditLog(entry: AuditLogEntry): Promise<void>;

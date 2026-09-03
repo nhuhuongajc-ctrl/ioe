@@ -42,7 +42,7 @@ export const PracticeHubView: React.FC<PracticeHubViewProps> = ({
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8 animate-in fade-in duration-200">
+    <div className="w-full space-y-6 sm:space-y-8 animate-in fade-in duration-200">
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white rounded-3xl p-6 md:p-10 shadow-xl border border-indigo-700/50">
         <div className="max-w-2xl space-y-3">

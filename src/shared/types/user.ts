@@ -12,11 +12,15 @@ export interface UserProfile {
   createdAt: string;
   lastLoginAt?: string;
   stats?: {
-    totalExamsTaken: number;
-    totalPracticeSessions: number;
+    totalExamsTaken?: number;
+    totalPracticeSessions?: number;
+    totalAttempts?: number;
+    completedAttempts?: number;
     highestScore: number;
     averageScore: number;
-    accuracyRate: number;
+    accuracyRate?: number;
+    totalTimeSpentSeconds?: number;
+    points?: number;
   };
 }
 

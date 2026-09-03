@@ -66,6 +66,35 @@ class ApiService {
     return data.logs || [];
   }
 
+  async getOverviewStats(): Promise<{
+    totalQuestions: number;
+    questionsByGrade: Record<number, number>;
+    questionsByLevel: Record<string, number>;
+    questionsBySkill: Record<string, number>;
+    totalStudents: number;
+    attemptsToday: number;
+    totalAttempts: number;
+    totalBlueprints: number;
+    recentAttempts: any[];
+  }> {
+    const res = await fetch('/api/users/overview-stats', { headers: this.getHeaders() });
+    if (!res.ok) throw new Error('Không thể tải thống kê tổng quan');
+    return res.json();
+  }
+
+  async getStudents(params: Record<string, any> = {}): Promise<{ items: UserProfile[]; total: number }> {
+    const query = new URLSearchParams();
+    query.append('role', 'student');
+    for (const [k, v] of Object.entries(params)) {
+      if (v !== undefined && v !== null && v !== '') {
+        query.append(k, String(v));
+      }
+    }
+    const res = await fetch(`/api/users?${query.toString()}`, { headers: this.getHeaders() });
+    if (!res.ok) throw new Error('Không thể tải danh sách học sinh');
+    return res.json();
+  }
+
   // --- Questions ---
   async getQuestions(params: Record<string, any> = {}): Promise<{ items: IOEQuestion[]; total: number }> {
     const query = new URLSearchParams();
@@ -314,11 +343,13 @@ class ApiService {
   }
 
   // --- Leaderboard ---
-  async getLeaderboard(params: { grade?: number; round?: number; limit?: number } = {}): Promise<LeaderboardEntry[]> {
+  async getLeaderboard(params: { grade?: number; round?: number; limit?: number; competitionLevel?: string; level?: string } = {}): Promise<LeaderboardEntry[]> {
     const query = new URLSearchParams();
     if (params.grade) query.append('grade', String(params.grade));
     if (params.round) query.append('round', String(params.round));
     if (params.limit) query.append('limit', String(params.limit));
+    const level = params.competitionLevel || params.level;
+    if (level) query.append('competitionLevel', String(level));
 
     const res = await fetch(`/api/ioe/leaderboard?${query.toString()}`, {
       headers: this.getHeaders()

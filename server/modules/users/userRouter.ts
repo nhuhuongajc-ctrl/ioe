@@ -7,6 +7,32 @@ export function createUserRouter(db: IRepository): Router {
   const router = Router();
   const auditLogger = new AuditLogger(db);
 
+  // Get system overview statistics (Staff only)
+  router.get('/overview-stats', requireRole(['teacher', 'super_admin', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const stats = await db.getSystemOverviewStats();
+      res.json(stats);
+    } catch (err: any) {
+      res.status(500).json({ error: 'FETCH_FAILED', message: err.message });
+    }
+  });
+
+  // List users / students with filtering and pagination (Staff only)
+  router.get('/', requireRole(['teacher', 'super_admin', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const role = (req.query.role as any) || undefined;
+      const grade = req.query.grade ? parseInt(req.query.grade as string, 10) : undefined;
+      const search = (req.query.search as string) || undefined;
+      const limit = parseInt(req.query.limit as string, 10) || 50;
+      const offset = parseInt(req.query.offset as string, 10) || 0;
+
+      const result = await db.listUsers({ role, grade, search, limit, offset });
+      res.json(result);
+    } catch (err: any) {
+      res.status(500).json({ error: 'FETCH_FAILED', message: err.message });
+    }
+  });
+
   // Get current user profile
   router.get('/me', async (req: AuthenticatedRequest, res: Response) => {
     if (!req.user) {

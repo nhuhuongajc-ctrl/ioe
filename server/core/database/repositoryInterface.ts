@@ -48,7 +48,7 @@ export interface IRepository {
   listUserAttempts(userId: string): Promise<AttemptSnapshot[]>;
 
   // Leaderboard
-  getLeaderboard(params: { grade?: number; round?: number; limit?: number }): Promise<LeaderboardEntry[]>;
+  getLeaderboard(params: { grade?: number; round?: number; limit?: number; competitionLevel?: string }): Promise<LeaderboardEntry[]>;
   recordLeaderboardEntry(entry: LeaderboardEntry): Promise<void>;
 
   // Users
